@@ -1258,8 +1258,8 @@ github.com/oklog/ulid/v2 v2.1.1/go.mod h1:rcEKHmBBKfef9DhnvX7y1HZBYxjXb0cP5ExxNs
 github.com/okta/okta-sdk-golang/v5 v5.0.2 h1:eecvycE/XDX56IWTsOVhqfj5txCgqryTXzKy7wKEq78=
 github.com/okta/okta-sdk-golang/v5 v5.0.2/go.mod h1:T/vmECtJX33YPZSVD+sorebd8LLhe38Bi/VrFTjgVX0=
 github.com/olekukonko/tablewriter v0.0.0-20180130162743-b8a9be070da4/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.0.0-20250819133920-800837c2fe89 h1:m1QSl2qTTuyKetc9phHghygFStZzVY27buoWdfUQ7v4=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.0.0-20250819133920-800837c2fe89/go.mod h1:94krybAw+XX7Y7XYASIOVsmY6fYdsBD7/VR1h52XUf4=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.0.0-20250820082509-617d3d0474fc h1:KXEN6eLb8ek9lNMS00cYZQ3kRfLyeuItNKjwHguk92A=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.0.0-20250820082509-617d3d0474fc/go.mod h1:94krybAw+XX7Y7XYASIOVsmY6fYdsBD7/VR1h52XUf4=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.8.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.16.5 h1:8xi0RTUf59SOSfEtZMvwTvXYMzG4gV23XVHOZiXNtnE=

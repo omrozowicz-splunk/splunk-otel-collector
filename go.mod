@@ -784,4 +784,4 @@ replace github.com/veraison/go-cose v1.2.0 => github.com/veraison/go-cose v1.1.1
 // pick up a fix for 0.130.0 update https://github.com/open-telemetry/opentelemetry-go/pull/7056
 replace go.opentelemetry.io/otel/exporters/prometheus v0.59.0 => go.opentelemetry.io/otel/exporters/prometheus v0.59.1
 
-replace github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.0.0-20250819133920-800837c2fe89
+replace github.com/open-telemetry/opentelemetry-collector-contrib/processor/k8sattributesprocessor => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/processor/k8sattributesprocessor v0.0.0-20250820082509-617d3d0474fc
