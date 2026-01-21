@@ -1285,6 +1285,8 @@ github.com/oklog/ulid/v2 v2.1.1/go.mod h1:rcEKHmBBKfef9DhnvX7y1HZBYxjXb0cP5ExxNs
 github.com/okta/okta-sdk-golang/v5 v5.0.2 h1:eecvycE/XDX56IWTsOVhqfj5txCgqryTXzKy7wKEq78=
 github.com/okta/okta-sdk-golang/v5 v5.0.2/go.mod h1:T/vmECtJX33YPZSVD+sorebd8LLhe38Bi/VrFTjgVX0=
 github.com/olekukonko/tablewriter v0.0.0-20180130162743-b8a9be070da4/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/stanza v0.0.0-20260121121409-af68ca01f4c2 h1:el4FWisc1zQPQKVKMsVaRt2SfXN/sqQbdFFF6VtKdQI=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/stanza v0.0.0-20260121121409-af68ca01f4c2/go.mod h1:ZY/7YjiqaKjbcGOGqyQlVvH/fovlV3RLE2iYE9wXkEc=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.8.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.16.5 h1:8xi0RTUf59SOSfEtZMvwTvXYMzG4gV23XVHOZiXNtnE=
@@ -1428,8 +1430,6 @@ github.com/open-telemetry/opentelemetry-collector-contrib/pkg/resourcetotelemetr
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/resourcetotelemetry v0.137.0/go.mod h1:MnuwJL3CxvEVqDhbEMjkfOfMJa8+AkoW7CylxqYyru8=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/sampling v0.137.0 h1:+V/4xWoh/uTMJQP2nhkyNT7l3Qz8XrXMGHN4qNJOXHs=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/sampling v0.137.0/go.mod h1:eG+S8AW1WqCM7ORKpu2kpQQTGkQdGQvO2gSiNs9vljs=
-github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza v0.137.0 h1:gcHbx7avhnxSOMU4ydKwOIbvlI0KDIDFhhQ0G55vobo=
-github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza v0.137.0/go.mod h1:ZY/7YjiqaKjbcGOGqyQlVvH/fovlV3RLE2iYE9wXkEc=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/status v0.137.0 h1:kYC7MXPj6ajigAkmurYw+NTrdS+jIHlosYdvkygQJrA=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/status v0.137.0/go.mod h1:jQl0ogRJyE7can2PPXTZjlZa/09AolUCijuMLhPEJc4=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/azure v0.137.0 h1:g1QmoGs/h+Q5+dxMJB3V/iAzXjrP3hnRmZ8skdTWCNI=

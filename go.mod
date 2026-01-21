@@ -806,3 +806,5 @@ replace (
 	k8s.io/apimachinery v0.33.1 => k8s.io/apimachinery v0.32.7
 	k8s.io/client-go v0.33.1 => k8s.io/client-go v0.32.6
 )
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/stanza v0.0.0-20260121121409-af68ca01f4c2
