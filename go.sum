@@ -1335,6 +1335,8 @@ github.com/oklog/ulid/v2 v2.1.1/go.mod h1:rcEKHmBBKfef9DhnvX7y1HZBYxjXb0cP5ExxNs
 github.com/okta/okta-sdk-golang/v5 v5.0.2 h1:eecvycE/XDX56IWTsOVhqfj5txCgqryTXzKy7wKEq78=
 github.com/okta/okta-sdk-golang/v5 v5.0.2/go.mod h1:T/vmECtJX33YPZSVD+sorebd8LLhe38Bi/VrFTjgVX0=
 github.com/olekukonko/tablewriter v0.0.0-20180130162743-b8a9be070da4/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260320110201-262de4ab007e h1:PzR+QL5HiXRtUoWrTOcA+N/nqjBWZiPrYq7Cr/x20G4=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260320110201-262de4ab007e/go.mod h1:LZzCuMWNRfVmiw0q0FOBQoZ4HvKVzihVXgu3wBIutlc=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.8.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.16.5 h1:8xi0RTUf59SOSfEtZMvwTvXYMzG4gV23XVHOZiXNtnE=
@@ -1372,8 +1374,6 @@ github.com/open-telemetry/opentelemetry-collector-contrib/exporter/sapmexporter 
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/sapmexporter v0.147.0/go.mod h1:aVmsD2wCy0mf5ip57XJDLxg/V0JuSU/ON/SBgp7pz5U=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.147.0 h1:N5eVDsNe2j0V6taGabYX4me8y911u85/t3c7tgqeSko=
 github.com/open-telemetry/opentelemetry-collector-contrib/exporter/signalfxexporter v0.147.0/go.mod h1:rf0GT3qKFT4IwTyhYNO/DAlrXP4DPkj39mcbAaNnbgo=
-github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.147.0 h1:ahzbHptTD80rbSUEEW7hDttuUQ5wneevzRrnDAeAwgI=
-github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.147.0/go.mod h1:dKTkq+ulZaB3nktwhLnzy8Vji5OAzIsiiUbz03E0qKQ=
 github.com/open-telemetry/opentelemetry-collector-contrib/extension/ackextension v0.147.0 h1:Wobz+J9wkQkt9POiXpXSxJ5zE/DMO+xB9FYY5SNbXqo=
 github.com/open-telemetry/opentelemetry-collector-contrib/extension/ackextension v0.147.0/go.mod h1:nCCulTbtd/fLh7joMoKPDARlLPqGzKt+0DE2xiLKb4w=
 github.com/open-telemetry/opentelemetry-collector-contrib/extension/basicauthextension v0.147.0 h1:5PjhFOIEALESZolVAfTC4Sg53RcIgGW/Ke5AYFQ9l5M=
