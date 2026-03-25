@@ -1335,8 +1335,8 @@ github.com/oklog/ulid/v2 v2.1.1/go.mod h1:rcEKHmBBKfef9DhnvX7y1HZBYxjXb0cP5ExxNs
 github.com/okta/okta-sdk-golang/v5 v5.0.2 h1:eecvycE/XDX56IWTsOVhqfj5txCgqryTXzKy7wKEq78=
 github.com/okta/okta-sdk-golang/v5 v5.0.2/go.mod h1:T/vmECtJX33YPZSVD+sorebd8LLhe38Bi/VrFTjgVX0=
 github.com/olekukonko/tablewriter v0.0.0-20180130162743-b8a9be070da4/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260325114717-2aeb834b8334 h1:w5WAyHI6LvuAjaACNeV2tQ4cnPW72a7aWkg8p16WpcA=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260325114717-2aeb834b8334/go.mod h1:dKTkq+ulZaB3nktwhLnzy8Vji5OAzIsiiUbz03E0qKQ=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260325120955-1d9c2f723442 h1:Jr+kut6Cjuv+hqG8U+7JKCIccuhQRnsmwTST/Znda/0=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260325120955-1d9c2f723442/go.mod h1:dKTkq+ulZaB3nktwhLnzy8Vji5OAzIsiiUbz03E0qKQ=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.8.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.16.5 h1:8xi0RTUf59SOSfEtZMvwTvXYMzG4gV23XVHOZiXNtnE=
