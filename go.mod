@@ -824,4 +824,4 @@ replace (
 	github.com/influxdata/telegraf => github.com/signalfx/telegraf v0.10.2-0.20250228233359-931557f78bed
 )
 
-replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260325091307-f108a2fe4adf
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260325093746-dc4569fe6070
