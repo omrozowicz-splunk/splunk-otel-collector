@@ -175,7 +175,7 @@ require (
 	go.opentelemetry.io/collector/receiver v1.55.1-0.20260402195938-76ede073ee8e
 	go.opentelemetry.io/collector/receiver/nopreceiver v0.149.0
 	go.opentelemetry.io/collector/receiver/otlpreceiver v0.149.0
-	go.opentelemetry.io/collector/receiver/receiverhelper v0.149.0
+	go.opentelemetry.io/collector/receiver/receiverhelper v0.149.1-0.20260402195938-76ede073ee8e
 	go.opentelemetry.io/collector/receiver/receivertest v0.149.1-0.20260402195938-76ede073ee8e
 	go.opentelemetry.io/collector/scraper v0.149.0
 	go.opentelemetry.io/collector/scraper/scraperhelper v0.149.0
@@ -835,6 +835,8 @@ replace (
 	github.com/influxdata/telegraf => github.com/signalfx/telegraf v0.10.2-0.20250228233359-931557f78bed
 )
 
-replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260407094455-19e4600be127
+replace github.com/open-telemetry/opentelemetry-collector-contrib/exporter/splunkhecexporter => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260408081833-f7dc6de1cd23
 
-replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/splunk v0.149.0 => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/translator/splunk v0.0.0-20260407094455-19e4600be127
+replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/splunk => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/translator/splunk v0.0.0-20260408081833-f7dc6de1cd23
+
+replace github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza => github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/stanza v0.0.0-20260408081833-f7dc6de1cd23

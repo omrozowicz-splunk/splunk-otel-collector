@@ -1366,10 +1366,12 @@ github.com/oklog/ulid/v2 v2.1.1/go.mod h1:rcEKHmBBKfef9DhnvX7y1HZBYxjXb0cP5ExxNs
 github.com/okta/okta-sdk-golang/v5 v5.0.2 h1:eecvycE/XDX56IWTsOVhqfj5txCgqryTXzKy7wKEq78=
 github.com/okta/okta-sdk-golang/v5 v5.0.2/go.mod h1:T/vmECtJX33YPZSVD+sorebd8LLhe38Bi/VrFTjgVX0=
 github.com/olekukonko/tablewriter v0.0.0-20180130162743-b8a9be070da4/go.mod h1:vsDQFd/mU46D+Z4whnwzcISnGGzXWMclvtLoiIKAKIo=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260407094455-19e4600be127 h1:uAyS2NKH8b+uY2YSjP7dfJmge4jobXI1NUJO+xVgXcs=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260407094455-19e4600be127/go.mod h1:QXeQ00Whi8owiohqbqdxTYiOgSzhlIcovaf7hO2o8ck=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/translator/splunk v0.0.0-20260407094455-19e4600be127 h1:byFD9QtQ0y4GVrZY1LcKn1kCDoGrBqLP+jN5tSBku9s=
-github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/translator/splunk v0.0.0-20260407094455-19e4600be127/go.mod h1:wIUqHC2pJkg86Vsz0iZ1AxKZfSh2cSbEhUXNnyOf8xg=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260408081833-f7dc6de1cd23 h1:tzWa9eszBM0KPlUiYe3+G+7C1QLp0ePJ9yfVm6SmTsY=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/exporter/splunkhecexporter v0.0.0-20260408081833-f7dc6de1cd23/go.mod h1:QXeQ00Whi8owiohqbqdxTYiOgSzhlIcovaf7hO2o8ck=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/stanza v0.0.0-20260408081833-f7dc6de1cd23 h1:KxbP9mRzLr3LQUiDJ5kgdaBrtt/zNlyAwJ+09Ksv0Hg=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/stanza v0.0.0-20260408081833-f7dc6de1cd23/go.mod h1:NdQoI4ceR0J6I4zWsjvArg3Nv5z4AiKKfVcvQTiNkwo=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/translator/splunk v0.0.0-20260408081833-f7dc6de1cd23 h1:AGEAa9zct/tQjUv1i/0JVJKawUYr6dUsSLeJZGllX2g=
+github.com/omrozowicz-splunk/opentelemetry-collector-contrib/pkg/translator/splunk v0.0.0-20260408081833-f7dc6de1cd23/go.mod h1:wIUqHC2pJkg86Vsz0iZ1AxKZfSh2cSbEhUXNnyOf8xg=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.8.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.16.5 h1:8xi0RTUf59SOSfEtZMvwTvXYMzG4gV23XVHOZiXNtnE=
@@ -1521,8 +1523,6 @@ github.com/open-telemetry/opentelemetry-collector-contrib/pkg/resourcetotelemetr
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/resourcetotelemetry v0.149.0/go.mod h1:rJ4DYBZls/oC3ITroSLYJd7Fng9WFNs5CfTTy7F0gw4=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/sampling v0.149.0 h1:xcb/4/F+N409xFiibytUEjd+d97NXKdvsXJTIz4/ARo=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/sampling v0.149.0/go.mod h1:77AZ11G8aPc83Zxw9yhIvDoRVhoeI7dsuE3bJGEZyeo=
-github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza v0.149.0 h1:AWMIXUWgRsAQhiBz3vRSAFhVwijjuG3LHPu6I/e+wfE=
-github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza v0.149.0/go.mod h1:GAi4i2SNVVIvHOE76q3mPtE9dZXMRLJdjCc7NmSa8Rs=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/status v0.149.0 h1:rKkXNt7eoM8CaOYkYk8tZNGlDpo+7pCUZWNG+wF6thA=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/status v0.149.0/go.mod h1:jqCrA88GYGAwkZsN5kky+gC6Zr3XB9Q1UYmyWEtmsA4=
 github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/azure v0.149.0 h1:82Xjm2exeQEz3jus9COw45T0+7O6T7TGnCPkD5lD2k8=
@@ -2289,8 +2289,8 @@ go.opentelemetry.io/collector/receiver/nopreceiver v0.149.0 h1:ti0hgZ5agWkOo9Hg0
 go.opentelemetry.io/collector/receiver/nopreceiver v0.149.0/go.mod h1:xMVMkmK4WfO3zyqlxxF9BXnUVfKhQxZNd82mUoREvyA=
 go.opentelemetry.io/collector/receiver/otlpreceiver v0.149.0 h1:pVTy3ACIN7heu4DnGAvQwW1cWMZkDG9ZzC0iNRlYdSQ=
 go.opentelemetry.io/collector/receiver/otlpreceiver v0.149.0/go.mod h1:xfENIgUlHMZ+HBSM5+a9bMwFclj9T4vnUYojNfhqqys=
-go.opentelemetry.io/collector/receiver/receiverhelper v0.149.0 h1:cuRWQ5alfQUwtQosjbOvy2+eKjKaVBaZat0r5S3dC0A=
-go.opentelemetry.io/collector/receiver/receiverhelper v0.149.0/go.mod h1:LpSzl7PfuN7LVmwdj6FwPKuwYwiNwUqtMDHU1uroNQU=
+go.opentelemetry.io/collector/receiver/receiverhelper v0.149.1-0.20260402195938-76ede073ee8e h1:Y52fpOcvBeGXxDg2qX3lAXoOY3Zzcan/UsEvorzqWcg=
+go.opentelemetry.io/collector/receiver/receiverhelper v0.149.1-0.20260402195938-76ede073ee8e/go.mod h1:/Lcw44z9aYhcQAHs39LfmlVERqroCWoNapGxlgt9W7Q=
 go.opentelemetry.io/collector/receiver/receivertest v0.149.1-0.20260402195938-76ede073ee8e h1:cBWuAZqOuedtWRDcKwWYifksZcoD7czrXt45bUl3lhw=
 go.opentelemetry.io/collector/receiver/receivertest v0.149.1-0.20260402195938-76ede073ee8e/go.mod h1:EjSpkHiIaC9zyO00Jw56+WN+QzPyZROC2qomfr/ZqtE=
 go.opentelemetry.io/collector/receiver/xreceiver v0.149.1-0.20260402195938-76ede073ee8e h1:Dx5cuWN9STf5M7fSvsyBUCgNxwesgxaRsexGey1/JIo=
