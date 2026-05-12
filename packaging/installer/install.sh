@@ -1967,7 +1967,13 @@ parse_args_and_install() {
 
   if [ "$with_metrics" = "true" ]; then
     configure_env_file "SPLUNK_PLATFORM_METRICS_INDEX" "$splunk_platform_metrics_index" "$collector_env_path"
-    otelcol_options="$otelcol_options --config $metrics_config_path"
+    if [ "$with_logs" = "true" ]; then
+      # when both are enabled, insert metrics config before logs so that logs config's
+      # service.extensions (which includes file_storage/filelogs) takes precedence
+      otelcol_options="$(echo "$otelcol_options" | sed "s|--config $logs_config_path|--config $metrics_config_path --config $logs_config_path|")"
+    else
+      otelcol_options="$otelcol_options --config $metrics_config_path"
+    fi
   fi
 
   if [ -n "$otelcol_options" ]; then
