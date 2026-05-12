@@ -62,6 +62,7 @@ collector_config_dir="/etc/otel/collector"
 agent_config_path="${collector_config_dir}/agent_config.yaml"
 gateway_config_path="${collector_config_dir}/gateway_config.yaml"
 logs_config_path="${collector_config_dir}/splunk_logs_config_linux.yaml"
+metrics_config_path="${collector_config_dir}/splunk_metrics_config_linux.yaml"
 logs_file_storage_path="/var/lib/otelcol/filelogs"
 old_config_path="${collector_config_dir}/splunk_config_linux.yaml"
 collector_env_path="${collector_config_dir}/splunk-otel-collector.conf"
@@ -1396,7 +1397,9 @@ parse_args_and_install() {
   local splunk_platform_token=
   local splunk_platform_url=
   local splunk_platform_logs_index=
+  local splunk_platform_metrics_index=
   local with_logs="false"
+  local with_metrics="false"
   local godebug=
   local ingest_url=
   local insecure=
@@ -1463,6 +1466,10 @@ parse_args_and_install() {
         ;;
       --splunk-platform-logs-index)
         splunk_platform_logs_index="$2"
+        shift 1
+        ;;
+      --splunk-platform-metrics-index)
+        splunk_platform_metrics_index="$2"
         shift 1
         ;;
       --godebug)
@@ -1672,9 +1679,12 @@ parse_args_and_install() {
     hec_url="${ingest_url}/v1/log"
   fi
 
-  # Auto-enable logs collection when any splunk-platform-* option is provided
-  if [ -n "$splunk_platform_token" ] || [ -n "$splunk_platform_url" ] || [ -n "$splunk_platform_logs_index" ]; then
+  # Auto-enable logs/metrics collection based on which index is provided
+  if [ -n "$splunk_platform_logs_index" ]; then
     with_logs="true"
+  fi
+  if [ -n "$splunk_platform_metrics_index" ]; then
+    with_metrics="true"
   fi
 
   if [ "$with_logs" = "true" ] && [ "$mode" = "gateway" ]; then
@@ -1772,7 +1782,7 @@ parse_args_and_install() {
     echo "HEC Endpoint: $hec_url"
   fi
   if [ -n "$splunk_platform_url" ]; then
-    echo "Logs Endpoint: $splunk_platform_url"
+    echo "Splunk Platform Endpoint: $splunk_platform_url"
   fi
   echo "GODEBUG: $godebug"
   if [ -n "$sdks_to_enable" ]; then
@@ -1939,17 +1949,25 @@ parse_args_and_install() {
     otelcol_options="--discovery"
   fi
 
+  if [ "$with_logs" = "true" ] || [ "$with_metrics" = "true" ]; then
+    configure_env_file "SPLUNK_PLATFORM_URL" "$splunk_platform_url" "$collector_env_path"
+    configure_env_file "SPLUNK_PLATFORM_TOKEN" "$splunk_platform_token" "$collector_env_path"
+  fi
+
   if [ "$with_logs" = "true" ]; then
     mkdir -p "$logs_file_storage_path"
     chown -R $service_user:$service_group "$logs_file_storage_path"
     chmod 700 "$logs_file_storage_path"
-      configure_env_file "SPLUNK_PLATFORM_URL" "$splunk_platform_url" "$collector_env_path"
-      configure_env_file "SPLUNK_PLATFORM_TOKEN" "$splunk_platform_token" "$collector_env_path"
     configure_env_file "SPLUNK_FILE_STORAGE_EXTENSION_PATH" "$logs_file_storage_path" "$collector_env_path"
     if [ -n "$splunk_platform_logs_index" ]; then
       configure_env_file "SPLUNK_PLATFORM_LOGS_INDEX" "$splunk_platform_logs_index" "$collector_env_path"
     fi
     otelcol_options="$otelcol_options --config $logs_config_path"
+  fi
+
+  if [ "$with_metrics" = "true" ]; then
+    configure_env_file "SPLUNK_PLATFORM_METRICS_INDEX" "$splunk_platform_metrics_index" "$collector_env_path"
+    otelcol_options="$otelcol_options --config $metrics_config_path"
   fi
 
   if [ -n "$otelcol_options" ]; then
@@ -1999,6 +2017,13 @@ Journald log collection is disabled by default. To enable it:
 
        sudo usermod -aG systemd-journal $service_user
        sudo systemctl restart splunk-otel-collector
+
+EOH
+  fi
+
+  if [ "$with_metrics" = "true" ]; then
+    cat <<EOH
+[NOTICE] Host metrics collection has been enabled using $metrics_config_path.
 
 EOH
   fi
