@@ -787,9 +787,6 @@ receivers:
   #######################################
 
 processors:
-  memory_limiter:
-    check_interval: 2s
-    limit_mib: ${SPLUNK_MEMORY_LIMIT_MIB}
 
   resourcedetection:
     detectors: [system, env]
@@ -856,7 +853,6 @@ service:
         #- file_log/zookeeper
         #- file_log/zookeeper-trace
       processors:
-        - memory_limiter
         - resourcedetection
       exporters:
         - splunk_hec/logs
