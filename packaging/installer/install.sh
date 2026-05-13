@@ -1954,6 +1954,16 @@ parse_args_and_install() {
     configure_env_file "SPLUNK_PLATFORM_TOKEN" "$splunk_platform_token" "$collector_env_path"
   fi
 
+  # When --config flags are used, SPLUNK_CONFIG is ignored by the collector. If o11y is also
+  # enabled, explicitly include the agent config so both pipelines are loaded.
+  # Multiple --config files require the mergeAppend feature gate so that service.extensions
+  # is union-merged rather than replaced by the last config file.
+  if ( [ "$with_logs" = "true" ] || [ "$with_metrics" = "true" ] ) && [ -n "$access_token" ]; then
+    otelcol_options="$otelcol_options --config $collector_config_path --feature-gates=confmap.enableMergeAppendOption"
+  elif [ "$with_logs" = "true" ] && [ "$with_metrics" = "true" ]; then
+    otelcol_options="$otelcol_options --feature-gates=confmap.enableMergeAppendOption"
+  fi
+
   if [ "$with_logs" = "true" ]; then
     mkdir -p "$logs_file_storage_path"
     chown -R $service_user:$service_group "$logs_file_storage_path"
@@ -1967,13 +1977,7 @@ parse_args_and_install() {
 
   if [ "$with_metrics" = "true" ]; then
     configure_env_file "SPLUNK_PLATFORM_METRICS_INDEX" "$splunk_platform_metrics_index" "$collector_env_path"
-    if [ "$with_logs" = "true" ]; then
-      # when both are enabled, insert metrics config before logs so that logs config's
-      # service.extensions (which includes file_storage/filelogs) takes precedence
-      otelcol_options="$(echo "$otelcol_options" | sed "s|--config $logs_config_path|--config $metrics_config_path --config $logs_config_path|")"
-    else
-      otelcol_options="$otelcol_options --config $metrics_config_path"
-    fi
+    otelcol_options="$otelcol_options --config $metrics_config_path"
   fi
 
   if [ -n "$otelcol_options" ]; then
