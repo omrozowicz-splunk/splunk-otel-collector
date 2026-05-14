@@ -124,7 +124,9 @@ def get_installer_cmd():
 
     install_cmd = f"sh -l {debug_flag} /test/install.sh -- {SPLUNK_ACCESS_TOKEN} --realm {SPLUNK_REALM}"
 
-    if VERSION != "latest":
+    if LOCAL_COLLECTOR_PACKAGE:
+        install_cmd = f"{install_cmd} --collector-version /test/collector.pkg --skip-collector-repo"
+    elif VERSION != "latest":
         install_cmd = f"{install_cmd} --collector-version {VERSION.lstrip('v')}"
 
     if STAGE != "release":
@@ -695,7 +697,9 @@ def get_platform_installer_cmd():
     debug_flag = "-x" if DEBUG == "yes" else ""
     install_cmd = f"sh -l {debug_flag} /test/install.sh"
 
-    if VERSION != "latest":
+    if LOCAL_COLLECTOR_PACKAGE:
+        install_cmd = f"{install_cmd} --collector-version /test/collector.pkg --skip-collector-repo"
+    elif VERSION != "latest":
         install_cmd = f"{install_cmd} --collector-version {VERSION.lstrip('v')}"
 
     if STAGE != "release":
@@ -724,6 +728,8 @@ def test_installer_splunk_platform_logs(distro, arch):
     print(f"Testing Splunk Platform logs installation on {distro} ({arch}) ...")
     with run_distro_container(distro, arch) as container:
         copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
 
         try:
             run_container_cmd(container, install_cmd, timeout=INSTALLER_TIMEOUT)
@@ -780,6 +786,8 @@ def test_installer_splunk_platform_metrics(distro, arch):
     print(f"Testing Splunk Platform metrics installation on {distro} ({arch}) ...")
     with run_distro_container(distro, arch) as container:
         copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
 
         try:
             run_container_cmd(container, install_cmd, timeout=INSTALLER_TIMEOUT)
@@ -829,6 +837,8 @@ def test_installer_splunk_platform_logs_and_metrics(distro, arch):
     print(f"Testing Splunk Platform logs+metrics installation on {distro} ({arch}) ...")
     with run_distro_container(distro, arch) as container:
         copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
 
         try:
             run_container_cmd(container, install_cmd, timeout=INSTALLER_TIMEOUT)
@@ -884,6 +894,8 @@ def test_installer_splunk_platform_and_o11y(distro, arch):
     print(f"Testing Splunk Platform + o11y installation on {distro} ({arch}) ...")
     with run_distro_container(distro, arch) as container:
         copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
 
         try:
             run_container_cmd(container, install_cmd, env={"VERIFY_ACCESS_TOKEN": "false"}, timeout=INSTALLER_TIMEOUT)
