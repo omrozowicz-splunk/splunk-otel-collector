@@ -950,6 +950,7 @@ install() {
         install_collector_apt_repo "$stage"
       fi
       apt-get -y update
+      apt-get -y install libcap2-bin
       install_apt_package "splunk-otel-collector" "$collector_version"
       if [ -n "$instrumentation_version" ]; then
         install_apt_package "splunk-otel-auto-instrumentation" "$instrumentation_version"
