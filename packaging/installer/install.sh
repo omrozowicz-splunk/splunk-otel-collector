@@ -1963,10 +1963,8 @@ parse_args_and_install() {
   # Multiple --config files require the mergeAppend feature gate so that service.extensions
   # is union-merged rather than replaced by the last config file.
   if [ -n "$access_token" ] && ( [ "$with_logs" = "true" ] || [ "$with_metrics" = "true" ] ); then
-    # o11y + at least one platform config: agent_config + platform config(s) → always 2+
     otelcol_options="$otelcol_options --config $collector_config_path --feature-gates=confmap.enableMergeAppendOption"
   elif [ "$with_logs" = "true" ] && [ "$with_metrics" = "true" ]; then
-    # platform-only but both logs and metrics: logs + metrics configs → 2 configs
     otelcol_options="$otelcol_options --feature-gates=confmap.enableMergeAppendOption"
   fi
 
