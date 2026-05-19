@@ -124,7 +124,9 @@ def get_installer_cmd():
 
     install_cmd = f"sh -l {debug_flag} /test/install.sh -- {SPLUNK_ACCESS_TOKEN} --realm {SPLUNK_REALM}"
 
-    if VERSION != "latest":
+    if LOCAL_COLLECTOR_PACKAGE:
+        install_cmd = f"{install_cmd} --collector-version /test/collector.pkg --skip-collector-repo"
+    elif VERSION != "latest":
         install_cmd = f"{install_cmd} --collector-version {VERSION.lstrip('v')}"
 
     if STAGE != "release":
@@ -680,3 +682,253 @@ def test_installer_with_obi(distro, arch):
         assert not container_file_exists(container, OBI_BIN), \
             f"OBI binary was not removed from {OBI_BIN} after uninstall"
 
+
+SPLUNK_PLATFORM_TOKEN = os.environ.get("SPLUNK_PLATFORM_TOKEN", "test-hec-token")
+SPLUNK_PLATFORM_URL = os.environ.get("SPLUNK_PLATFORM_URL", "https://splunk.example.com:8088/services/collector")
+SPLUNK_PLATFORM_LOGS_INDEX = "test-logs-index"
+SPLUNK_PLATFORM_METRICS_INDEX = "test-metrics-index"
+LOGS_CONFIG_PATH = "/etc/otel/collector/splunk_logs_config_linux.yaml"
+METRICS_CONFIG_PATH = "/etc/otel/collector/splunk_metrics_config_linux.yaml"
+LOGS_FILE_STORAGE_PATH = "/var/lib/otelcol/filelogs"
+
+
+def get_platform_installer_cmd():
+    """Return an installer command for Splunk Platform mode (no o11y token/realm)."""
+    debug_flag = "-x" if DEBUG == "yes" else ""
+    install_cmd = f"sh -l {debug_flag} /test/install.sh"
+
+    if LOCAL_COLLECTOR_PACKAGE:
+        install_cmd = f"{install_cmd} --collector-version /test/collector.pkg --skip-collector-repo"
+    elif VERSION != "latest":
+        install_cmd = f"{install_cmd} --collector-version {VERSION.lstrip('v')}"
+
+    if STAGE != "release":
+        assert STAGE in ("test", "beta"), f"Unsupported stage '{STAGE}'!"
+        install_cmd = f"{install_cmd} --{STAGE}"
+
+    return install_cmd
+
+
+@pytest.mark.installer
+@pytest.mark.parametrize(
+    "distro",
+    [pytest.param(distro, marks=pytest.mark.deb) for distro in DEB_DISTROS]
+    + [pytest.param(distro, marks=pytest.mark.rpm) for distro in RPM_DISTROS],
+)
+@pytest.mark.parametrize("arch", ["amd64", "arm64"])
+def test_installer_splunk_platform_logs(distro, arch):
+    """Verify installer correctly configures Splunk Platform log collection."""
+    install_cmd = " ".join((
+        get_platform_installer_cmd(),
+        f"--splunk-platform-token {SPLUNK_PLATFORM_TOKEN}",
+        f"--splunk-platform-url {SPLUNK_PLATFORM_URL}",
+        f"--splunk-platform-logs-index {SPLUNK_PLATFORM_LOGS_INDEX}",
+    ))
+
+    print(f"Testing Splunk Platform logs installation on {distro} ({arch}) ...")
+    with run_distro_container(distro, arch) as container:
+        copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
+
+        try:
+            run_container_cmd(container, install_cmd, timeout=INSTALLER_TIMEOUT)
+            time.sleep(5)
+
+            # verify collector service is running
+            assert wait_for(lambda: service_is_running(container, service_owner=SERVICE_OWNER))
+
+            # verify Splunk Platform env vars written to env file
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_TOKEN", SPLUNK_PLATFORM_TOKEN)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_URL", SPLUNK_PLATFORM_URL)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_LOGS_INDEX", SPLUNK_PLATFORM_LOGS_INDEX)
+
+            # verify o11y vars are NOT written (platform-only mode)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_ACCESS_TOKEN", None, exists=False)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_REALM", None, exists=False)
+
+            # verify logs config is referenced in OTELCOL_OPTIONS
+            _, env_content = container.exec_run(f"cat {SPLUNK_ENV_PATH}")
+            assert LOGS_CONFIG_PATH in env_content.decode("utf-8"), \
+                f"{LOGS_CONFIG_PATH} not found in OTELCOL_OPTIONS"
+
+            # verify file storage directory created with correct permissions
+            assert container.exec_run(f"test -d {LOGS_FILE_STORAGE_PATH}").exit_code == 0, \
+                f"{LOGS_FILE_STORAGE_PATH} directory not created"
+            _, perms = container.exec_run(f"stat -c '%a' {LOGS_FILE_STORAGE_PATH}")
+            assert perms.decode("utf-8").strip() == "700", \
+                f"{LOGS_FILE_STORAGE_PATH} has wrong permissions: {perms.decode('utf-8').strip()}"
+
+            # verify logs config file is present on disk
+            assert container_file_exists(container, LOGS_CONFIG_PATH), \
+                f"{LOGS_CONFIG_PATH} not found on disk"
+
+        finally:
+            run_container_cmd(container, f"journalctl -u {SERVICE_NAME} --no-pager")
+
+
+@pytest.mark.installer
+@pytest.mark.parametrize(
+    "distro",
+    [pytest.param(distro, marks=pytest.mark.deb) for distro in DEB_DISTROS]
+    + [pytest.param(distro, marks=pytest.mark.rpm) for distro in RPM_DISTROS],
+)
+@pytest.mark.parametrize("arch", ["amd64", "arm64"])
+def test_installer_splunk_platform_metrics(distro, arch):
+    """Verify installer correctly configures Splunk Platform metrics collection."""
+    install_cmd = " ".join((
+        get_platform_installer_cmd(),
+        f"--splunk-platform-token {SPLUNK_PLATFORM_TOKEN}",
+        f"--splunk-platform-url {SPLUNK_PLATFORM_URL}",
+        f"--splunk-platform-metrics-index {SPLUNK_PLATFORM_METRICS_INDEX}",
+    ))
+
+    print(f"Testing Splunk Platform metrics installation on {distro} ({arch}) ...")
+    with run_distro_container(distro, arch) as container:
+        copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
+
+        try:
+            run_container_cmd(container, install_cmd, timeout=INSTALLER_TIMEOUT)
+            time.sleep(5)
+
+            assert wait_for(lambda: service_is_running(container, service_owner=SERVICE_OWNER))
+
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_TOKEN", SPLUNK_PLATFORM_TOKEN)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_URL", SPLUNK_PLATFORM_URL)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_METRICS_INDEX", SPLUNK_PLATFORM_METRICS_INDEX)
+
+            # verify o11y vars are NOT written
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_ACCESS_TOKEN", None, exists=False)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_REALM", None, exists=False)
+
+            # verify metrics config is referenced in OTELCOL_OPTIONS
+            _, env_content = container.exec_run(f"cat {SPLUNK_ENV_PATH}")
+            assert METRICS_CONFIG_PATH in env_content.decode("utf-8"), \
+                f"{METRICS_CONFIG_PATH} not found in OTELCOL_OPTIONS"
+
+            # verify metrics config file is present on disk
+            assert container_file_exists(container, METRICS_CONFIG_PATH), \
+                f"{METRICS_CONFIG_PATH} not found on disk"
+
+        finally:
+            run_container_cmd(container, f"journalctl -u {SERVICE_NAME} --no-pager")
+
+
+@pytest.mark.installer
+@pytest.mark.parametrize(
+    "distro",
+    [pytest.param(distro, marks=pytest.mark.deb) for distro in DEB_DISTROS]
+    + [pytest.param(distro, marks=pytest.mark.rpm) for distro in RPM_DISTROS],
+)
+@pytest.mark.parametrize("arch", ["amd64", "arm64"])
+def test_installer_splunk_platform_logs_and_metrics(distro, arch):
+    """Verify installer correctly configures both logs and metrics for Splunk Platform,
+    and that both config files are loaded together without conflicting."""
+    install_cmd = " ".join((
+        get_platform_installer_cmd(),
+        f"--splunk-platform-token {SPLUNK_PLATFORM_TOKEN}",
+        f"--splunk-platform-url {SPLUNK_PLATFORM_URL}",
+        f"--splunk-platform-logs-index {SPLUNK_PLATFORM_LOGS_INDEX}",
+        f"--splunk-platform-metrics-index {SPLUNK_PLATFORM_METRICS_INDEX}",
+    ))
+
+    print(f"Testing Splunk Platform logs+metrics installation on {distro} ({arch}) ...")
+    with run_distro_container(distro, arch) as container:
+        copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
+
+        try:
+            run_container_cmd(container, install_cmd, timeout=INSTALLER_TIMEOUT)
+            time.sleep(5)
+
+            assert wait_for(lambda: service_is_running(container, service_owner=SERVICE_OWNER))
+
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_TOKEN", SPLUNK_PLATFORM_TOKEN)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_URL", SPLUNK_PLATFORM_URL)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_LOGS_INDEX", SPLUNK_PLATFORM_LOGS_INDEX)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_METRICS_INDEX", SPLUNK_PLATFORM_METRICS_INDEX)
+
+            _, env_content = container.exec_run(f"cat {SPLUNK_ENV_PATH}")
+            env_str = env_content.decode("utf-8")
+
+            # verify both config files are referenced in OTELCOL_OPTIONS
+            assert LOGS_CONFIG_PATH in env_str, f"{LOGS_CONFIG_PATH} not found in OTELCOL_OPTIONS"
+            assert METRICS_CONFIG_PATH in env_str, f"{METRICS_CONFIG_PATH} not found in OTELCOL_OPTIONS"
+
+            # verify the mergeAppend feature gate is enabled when both configs are active
+            assert "confmap.enableMergeAppendOption" in env_str, \
+                "confmap.enableMergeAppendOption feature gate not found in OTELCOL_OPTIONS"
+
+            # verify file storage directory exists with correct permissions
+            assert container.exec_run(f"test -d {LOGS_FILE_STORAGE_PATH}").exit_code == 0
+            _, perms = container.exec_run(f"stat -c '%a' {LOGS_FILE_STORAGE_PATH}")
+            assert perms.decode("utf-8").strip() == "700"
+
+        finally:
+            run_container_cmd(container, f"journalctl -u {SERVICE_NAME} --no-pager")
+
+
+@pytest.mark.installer
+@pytest.mark.parametrize(
+    "distro",
+    [pytest.param(distro, marks=pytest.mark.deb) for distro in DEB_DISTROS]
+    + [pytest.param(distro, marks=pytest.mark.rpm) for distro in RPM_DISTROS],
+)
+@pytest.mark.parametrize("arch", ["amd64", "arm64"])
+def test_installer_splunk_platform_and_o11y(distro, arch):
+    """Verify installer correctly configures both Splunk Platform (logs+metrics) and
+    Splunk Observability Cloud (o11y) simultaneously. All three configs must be loaded
+    and the mergeAppend feature gate must be enabled so service.extensions are union-merged."""
+    # get_installer_cmd() already includes SPLUNK_ACCESS_TOKEN and --realm SPLUNK_REALM
+    install_cmd = " ".join((
+        get_installer_cmd(),
+        f"--splunk-platform-token {SPLUNK_PLATFORM_TOKEN}",
+        f"--splunk-platform-url {SPLUNK_PLATFORM_URL}",
+        f"--splunk-platform-logs-index {SPLUNK_PLATFORM_LOGS_INDEX}",
+        f"--splunk-platform-metrics-index {SPLUNK_PLATFORM_METRICS_INDEX}",
+    ))
+
+    print(f"Testing Splunk Platform + o11y installation on {distro} ({arch}) ...")
+    with run_distro_container(distro, arch) as container:
+        copy_file_into_container(container, INSTALLER_PATH, "/test/install.sh")
+        if LOCAL_COLLECTOR_PACKAGE:
+            copy_file_into_container(container, LOCAL_COLLECTOR_PACKAGE, "/test/collector.pkg")
+
+        try:
+            run_container_cmd(container, install_cmd, env={"VERIFY_ACCESS_TOKEN": "false"}, timeout=INSTALLER_TIMEOUT)
+            time.sleep(5)
+
+            assert wait_for(lambda: service_is_running(container, service_owner=SERVICE_OWNER))
+
+            # verify o11y vars written
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_ACCESS_TOKEN", SPLUNK_ACCESS_TOKEN)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_REALM", SPLUNK_REALM)
+
+            # verify Splunk Platform vars written
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_TOKEN", SPLUNK_PLATFORM_TOKEN)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_URL", SPLUNK_PLATFORM_URL)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_LOGS_INDEX", SPLUNK_PLATFORM_LOGS_INDEX)
+            verify_config_file(container, SPLUNK_ENV_PATH, "SPLUNK_PLATFORM_METRICS_INDEX", SPLUNK_PLATFORM_METRICS_INDEX)
+
+            _, env_content = container.exec_run(f"cat {SPLUNK_ENV_PATH}")
+            env_str = env_content.decode("utf-8")
+
+            # verify all three config files referenced in OTELCOL_OPTIONS
+            assert AGENT_CONFIG_PATH in env_str, f"{AGENT_CONFIG_PATH} not found in OTELCOL_OPTIONS"
+            assert LOGS_CONFIG_PATH in env_str, f"{LOGS_CONFIG_PATH} not found in OTELCOL_OPTIONS"
+            assert METRICS_CONFIG_PATH in env_str, f"{METRICS_CONFIG_PATH} not found in OTELCOL_OPTIONS"
+
+            # verify mergeAppend feature gate enabled
+            assert "confmap.enableMergeAppendOption" in env_str, \
+                "confmap.enableMergeAppendOption feature gate not found in OTELCOL_OPTIONS"
+
+            # verify file storage directory exists with correct permissions
+            assert container.exec_run(f"test -d {LOGS_FILE_STORAGE_PATH}").exit_code == 0
+            _, perms = container.exec_run(f"stat -c '%a' {LOGS_FILE_STORAGE_PATH}")
+            assert perms.decode("utf-8").strip() == "700"
+
+        finally:
+            run_container_cmd(container, f"journalctl -u {SERVICE_NAME} --no-pager")
